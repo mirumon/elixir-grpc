@@ -1,0 +1,44 @@
+name: Tests
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  tests:
+    name: Run tests (OTP ${{ matrix.otp-version }} / Elixir ${{ matrix.elixir-version }})
+
+    runs-on: ubuntu-18.04
+
+    strategy:
+      matrix:
+        otp:
+          - "24.x"
+
+        elixir:
+          - "1.13.x"
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: ${{ matrix.otp-version }}
+          elixir-version: ${{ matrix.elixir-version }}
+
+      - name: Set up cache
+        uses: actions/cache@v3.0.2
+        id: cache
+        with:
+          path: |
+            deps
+            _build
+            priv/plts
+          key: tests-${{ runner.os }}-${{ matrix.otp-version }}-${{ matrix.elixir-version }}-${{ hashFiles('mix.lock') }}
+
+      - name: Install dependencies
+        if: steps.mix-cache.outputs.cache-hit != 'true'
+        run: mix deps.get --only test
+
+      - name: Run tests
+        run: mix test
