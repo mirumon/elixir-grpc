@@ -12,10 +12,10 @@ jobs:
 
     strategy:
       matrix:
-        otp:
+        otp-version:
           - "24.x"
 
-        elixir:
+        elixir-version:
           - "1.13.x"
 
     steps:
