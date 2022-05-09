@@ -36,7 +36,7 @@ defmodule GRPC.Mixfile do
 
   defp deps do
     [
-      {:protobuf, "~> 0.5"},
+      {:protobuf, "~> 0.9"},
       {:cowboy, "~> 2.9"},
       {:gun, "~> 2.0.0-rc.2"},
       {:ex_doc, "~> 0.23", only: :dev},
